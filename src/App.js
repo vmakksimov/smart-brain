@@ -9,13 +9,15 @@ import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import './App.css';
+import Modal from './components/Modal/Modal';
 
 const initialState = {
   input: '',
   imageUrl: '',
   box: [],
-  route: 'home',
-  isSignedIn: true,
+  route: 'signin',
+  isSignedIn: false,
+  isProfileOpen: false,
   user: {
     id: '',
     name: '',
@@ -106,7 +108,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState(initialState)
+      return this.setState(initialState)
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
@@ -118,10 +120,13 @@ class App extends Component {
     return (
       <div className="App">
         <ParticlesBg type="circle" bg={true} />
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} user={this.state.user} />
         { route === 'home'
           ? <div>
               <Logo />
+              <Modal>
+                {'hello'}
+              </Modal>
               <Rank
                 name={this.state.user.name}
                 entries={this.state.user.entries}
