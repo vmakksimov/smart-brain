@@ -37,7 +37,46 @@ class App extends Component {
     this.state = initialState;
   }
 
+  componentDidMount() {
+    const token = window.sessionStorage.getItem('token');
+    console.log('before token', token)
+    if (token) {
+      console.log('here in fetch')
+      fetch('http://localhost:3000/signin', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        }
+      })
+        .then(resp => resp.json())
+        .then(data => {
+          console.log('dataaaaa', data)
+          if (data && data.id) {
+            fetch(`http://localhost:3000/profile/${data.id}`, {
+              method: 'get',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+              }
+            })
+            
+            .then(resp => resp.json())
+            .then(user => {
+              console.log("user", user)
+              if (user && user.email){
+                this.loadUser(user)
+                this.onRouteChange('home')
+              }
+            })
+          }
+        })
+        .catch(error => console.error('Error fetching data:', error))
+    }
+  }
+
   loadUser = (data) => {
+    console.log("loadUser", data)
     this.setState({
       user: {
         id: data.id,
@@ -88,7 +127,9 @@ class App extends Component {
     this.setState({ imageUrl: this.state.input });
     fetch('http://localhost:3000/imageurl', {
       method: 'post',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.getItem("token")
+    },
       body: JSON.stringify({
         input: this.state.input
       })
@@ -98,7 +139,9 @@ class App extends Component {
         if (response) {
           fetch('http://localhost:3000/image', {
             method: 'put',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json',
+            'Authorization': window.sessionStorage.getItem("token")
+          },
             body: JSON.stringify({
               id: this.state.user.id
             })
@@ -127,8 +170,8 @@ class App extends Component {
   toggleModal = () => {
     this.setState(prevState => ({
       ...prevState, isProfileOpen: !prevState.isProfileOpen
-  })
-      
+    })
+
     )
   }
 
@@ -140,7 +183,7 @@ class App extends Component {
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} user={this.state.user} toggleModal={this.toggleModal} />
         {isProfileOpen &&
           <Modal >
-            <Profile isProfileOpen={isProfileOpen} toggleModal={this.toggleModal} user={user} loadUser={this.loadUser}/>
+            <Profile isProfileOpen={isProfileOpen} toggleModal={this.toggleModal} user={user} loadUser={this.loadUser} />
             {'hello'}
           </Modal>}
         {route === 'home'
