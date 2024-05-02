@@ -60,15 +60,15 @@ class App extends Component {
                 'Authorization': token
               }
             })
-            
-            .then(resp => resp.json())
-            .then(user => {
-              console.log("user", user)
-              if (user && user.email){
-                this.loadUser(user)
-                this.onRouteChange('home')
-              }
-            })
+
+              .then(resp => resp.json())
+              .then(user => {
+                console.log("user", user)
+                if (user && user.email) {
+                  this.loadUser(user)
+                  this.onRouteChange('home')
+                }
+              })
           }
         })
         .catch(error => console.error('Error fetching data:', error))
@@ -91,32 +91,31 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data) => {
-    let clarifaiMultipleFaces = data.outputs[0].data.regions
-    const image = document.getElementById('inputimage');
-    const width = Number(image.width);
-    const height = Number(image.height);
-    let elements = [];
-    clarifaiMultipleFaces.forEach(element => {
-      elements.push({
-        leftCol: element.region_info.bounding_box.left_col * width,
-        topRow: element.region_info.bounding_box.top_row * height,
-        rightCol: width - (element.region_info.bounding_box.right_col * width),
-        bottomRow: height - (element.region_info.bounding_box.bottom_row * height)
-      })
+    if (data && data.outputs) {
+      let clarifaiMultipleFaces = data.outputs[0].data.regions
+      const image = document.getElementById('inputimage');
+      const width = Number(image.width);
+      const height = Number(image.height);
+      let elements = [];
+      clarifaiMultipleFaces.forEach(element => {
+        elements.push({
+          leftCol: element.region_info.bounding_box.left_col * width,
+          topRow: element.region_info.bounding_box.top_row * height,
+          rightCol: width - (element.region_info.bounding_box.right_col * width),
+          bottomRow: height - (element.region_info.bounding_box.bottom_row * height)
+        })
 
-    });
+      });
 
-    return elements;
-    // return {
-    //   leftCol: clarifaiFace.left_col * width,
-    //   topRow: clarifaiFace.top_row * height,
-    //   rightCol: width - (clarifaiFace.right_col * width),
-    //   bottomRow: height - (clarifaiFace.bottom_row * height)
-    // }
+      return elements;
+    }
   }
 
   displayFaceBox = (box) => {
-    this.setState({ box: box });
+    if (box) {
+      this.setState({ box: box });
+    }
+
   }
 
   onInputChange = (event) => {
@@ -127,9 +126,10 @@ class App extends Component {
     this.setState({ imageUrl: this.state.input });
     fetch('http://localhost:3000/imageurl', {
       method: 'post',
-      headers: { 'Content-Type': 'application/json',
-      'Authorization': window.sessionStorage.getItem("token")
-    },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': window.sessionStorage.getItem("token")
+      },
       body: JSON.stringify({
         input: this.state.input
       })
@@ -139,9 +139,10 @@ class App extends Component {
         if (response) {
           fetch('http://localhost:3000/image', {
             method: 'put',
-            headers: { 'Content-Type': 'application/json',
-            'Authorization': window.sessionStorage.getItem("token")
-          },
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': window.sessionStorage.getItem("token")
+            },
             body: JSON.stringify({
               id: this.state.user.id
             })
@@ -160,6 +161,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
+      window.sessionStorage.removeItem('token')
       return this.setState(initialState)
     } else if (route === 'home') {
       this.setState({ isSignedIn: true })
@@ -174,6 +176,8 @@ class App extends Component {
 
     )
   }
+
+
 
   render() {
     const { isSignedIn, imageUrl, route, box, isProfileOpen, user } = this.state;
