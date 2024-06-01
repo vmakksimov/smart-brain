@@ -1,4 +1,5 @@
 import React from 'react';
+const baseUrl = 'http://localhost:8000';
 
 class Signin extends React.Component {
     constructor(props) {
@@ -22,7 +23,7 @@ class Signin extends React.Component {
     }
 
     onSubmitSignIn = () => {
-        fetch('http://localhost:3000/signin', {
+        fetch(`${baseUrl}/signin`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -37,7 +38,7 @@ class Signin extends React.Component {
                     console.log("sign in user:", data)
                     this.saveAuthTokenInSession(data.token)
                     console.log("data after sign in", data)
-                    fetch(`http://localhost:3000/profile/${data.userId}`, {
+                    fetch(`${baseUrl}/profile/${data.userId}`, {
                         method: 'get',
                         headers: {
                             'Content-Type': 'application/json',

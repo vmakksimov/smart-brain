@@ -12,6 +12,8 @@ import './App.css';
 import Modal from './components/Modal/Modal';
 import Profile from './components/Profile/Profile';
 
+const baseUrl = 'http://localhost:8000';
+
 const initialState = {
   input: '',
   imageUrl: '',
@@ -42,7 +44,7 @@ class App extends Component {
     console.log('before token', token)
     if (token) {
       console.log('here in fetch')
-      fetch('http://localhost:3000/signin', {
+      fetch(`${baseUrl}/signin`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +55,7 @@ class App extends Component {
         .then(data => {
           console.log('dataaaaa', data)
           if (data && data.id) {
-            fetch(`http://localhost:3000/profile/${data.id}`, {
+            fetch(`${baseUrl}/profile/${data.id}`, {
               method: 'get',
               headers: {
                 'Content-Type': 'application/json',
@@ -124,7 +126,7 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    fetch('http://localhost:3000/imageurl', {
+    fetch(`${baseUrl}/imageurl`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -137,7 +139,7 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('http://localhost:3000/image', {
+          fetch(`${baseUrl}/image`, {
             method: 'put',
             headers: {
               'Content-Type': 'application/json',
