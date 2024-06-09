@@ -39,13 +39,14 @@ class Signin extends React.Component {
                     this.saveAuthTokenInSession(data.token)
                     console.log("data after sign in", data)
                     fetch(`${baseUrl}/profile/${data.userId}`, {
-                        method: 'get',
+                        method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': data.token
-                        }
+                        },
+                    
                     })
-                        .then(resp => resp.json())
+                        .then(promise => promise.json())
                         .then(user => {
                             console.log("user", user)
                             if (user && user.email) {
@@ -53,7 +54,7 @@ class Signin extends React.Component {
                                 this.props.onRouteChange('home')
                             }
                         })
-                        .catch(console.log)
+                        .catch(err => console.log("errorrrr", err))
                 }
             })
     }

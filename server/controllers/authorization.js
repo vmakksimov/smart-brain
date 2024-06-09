@@ -7,7 +7,7 @@ const requireAuth = async (req, res, next) => {
         console.log('here to throw error')
         return res.status(401).json('Unathorized')
     }
-    console.log("redisClienttt", redisClient)
+
     await redisClient.connect()
     await redisClient.get(authorization, async (err, reply) => {
         if (err || !reply) {

@@ -7,8 +7,10 @@
     "install-server": "npm install --prefix server",
     "install-client": "npm install --prefix client",
     "install-app": "npm run install-server && npm run install-client",
+    "start": "cd server && node server.js",
+    "start-app": "cd server && docker-compose up --build",
     "start-server": "cd server && docker-compose up --build",
-    "start": "concurrently \"npm run start-server\" \"npm start --prefix client\"",
+    "start-both": "concurrently \"npm run start-server\" \"npm start --prefix client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

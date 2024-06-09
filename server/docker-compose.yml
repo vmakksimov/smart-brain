@@ -4,7 +4,7 @@ services:
 #BACKEND API
   smart-brain-api:
     container_name: backend
-    build: ./
+    build: ../
     command: npm start
     working_dir: /user/src/smart-brain-api
     env_file:

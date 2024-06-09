@@ -1,16 +1,22 @@
-const { json } = require("body-parser");
+
 
 const handleProfileGet = (req, res, db) => {
-  const { id } = req.params;
-  db.select('*').from('users').where({ id })
-    .then(user => {
-      if (user.length) {
-        res.json(user[0])
-      } else {
-        res.status(400).json('Not found')
-      }
-    })
-    .catch(err => res.status(400).json('error getting user'))
+  try {
+    const { id } = req.params;
+    console.log('in handleProfileGet')
+    db.select('*').from('users').where({ id })
+      .then(user => {
+        if (user.length) {
+          res.json(user[0])
+        } else {
+          res.status(400).json('Not found')
+        }
+      })
+      .catch(err => res.status(400).json('error getting user'))
+  } catch (error) {
+    console.log("error in try", error)
+  }
+  
 }
 
 
