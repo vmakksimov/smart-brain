@@ -6,6 +6,7 @@ const knex = require('knex');
 const morgan = require('morgan');
 const path = require('path');
 const auth = require('./controllers/authorization')
+const http = require('http');
 
 
 const register = require('./controllers/register');
@@ -47,6 +48,7 @@ app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfile
 app.put('/image', auth.requireAuth, (req, res) => { image.handleImage(req, res, db)})
 app.post('/imageurl', auth.requireAuth, (req, res) => { image.handleApiCall(req, res)})
 
-app.listen(8000, ()=> {
-  console.log('app is running on port 8000');
+const server = http.createServer(app);
+server.listen(8000, ()=> {
+  console.log('app is running on port 6000');
 })
