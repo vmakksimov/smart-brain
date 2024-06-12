@@ -51,8 +51,8 @@ class Signin extends React.Component {
                             console.log("user", user)
                             if (user && user.email) {
                                 this.props.loadUser(user)
-                                // TODO change the backend to provide token until then switching the routing to SignIn
-                                this.props.onRouteChange('signin')
+                                
+                                this.props.onRouteChange('home')
                             }
                         })
                         .catch(err => console.log("errorrrr", err))
