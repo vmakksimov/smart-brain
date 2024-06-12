@@ -34,7 +34,7 @@ class Profile extends React.Component {
         const nameOfUser = this.state.name
         console.log('name:', nameOfUser)
         console.log("this prosp:",this.props)
-        fetch(`${baseUrl}/profile/${this.props.user.id}`, {
+        fetch(`/profile/${this.props.user.id}`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json',
                         'Authorization' : window.sessionStorage.getItem('token')},

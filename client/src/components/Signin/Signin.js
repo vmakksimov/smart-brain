@@ -23,7 +23,7 @@ class Signin extends React.Component {
     }
 
     onSubmitSignIn = () => {
-        fetch(`${baseUrl}/signin`, {
+        fetch(`/signin`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -38,7 +38,7 @@ class Signin extends React.Component {
                     console.log("sign in user:", data)
                     this.saveAuthTokenInSession(data.token)
                     console.log("data after sign in", data)
-                    fetch(`${baseUrl}/profile/${data.userId}`, {
+                    fetch(`/profile/${data.userId}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -51,7 +51,8 @@ class Signin extends React.Component {
                             console.log("user", user)
                             if (user && user.email) {
                                 this.props.loadUser(user)
-                                this.props.onRouteChange('home')
+                                // TODO change the backend to provide token until then switching the routing to SignIn
+                                this.props.onRouteChange('signin')
                             }
                         })
                         .catch(err => console.log("errorrrr", err))

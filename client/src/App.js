@@ -41,10 +41,8 @@ class App extends Component {
 
   componentDidMount() {
     const token = window.sessionStorage.getItem('token');
-    console.log('before token', token)
     if (token) {
-      console.log('here in fetch')
-      fetch(`${baseUrl}/signin`, {
+      fetch(`/signin`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -53,9 +51,8 @@ class App extends Component {
       })
         .then(resp => resp.json())
         .then(data => {
-          console.log('dataaaaa', data)
           if (data && data.id) {
-            fetch(`${baseUrl}/profile/${data.id}`, {
+            fetch(`/profile/${data.id}`, {
               method: 'get',
               headers: {
                 'Content-Type': 'application/json',
@@ -65,7 +62,6 @@ class App extends Component {
 
               .then(resp => resp.json())
               .then(user => {
-                console.log("user", user)
                 if (user && user.email) {
                   this.loadUser(user)
                   this.onRouteChange('home')
@@ -78,7 +74,6 @@ class App extends Component {
   }
 
   loadUser = (data) => {
-    console.log("loadUser", data)
     this.setState({
       user: {
         id: data.id,
@@ -126,7 +121,7 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    fetch(`${baseUrl}/imageurl`, {
+    fetch(`/imageurl`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -139,7 +134,7 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch(`${baseUrl}/image`, {
+          fetch(`/image`, {
             method: 'put',
             headers: {
               'Content-Type': 'application/json',
